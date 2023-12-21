@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\{
+                                 SupportController
+                            };
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::resource('/supports', SupportController::class);
 
 Route::get('/', function () {
     return view('welcome');
