@@ -20,4 +20,15 @@ class SupportController extends Controller
     {
         return view('admin/supports/create');
     }
+
+    public function store(Request $request, Support $support)
+    {
+        $data = $request->all();
+        $data['status'] = 'a';
+
+        $support->create($data);
+
+        return redirect()->route('supports.index')->with('success','Duvida Cadaastrada com sucesso!');
+    }
+
 }
