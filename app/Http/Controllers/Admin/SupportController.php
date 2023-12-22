@@ -13,7 +13,7 @@ class SupportController extends Controller
 
         $supports = Support::all();
 
-        return view('admin/supports/index', compact('supports'));
+        return view('admin.supports.index', compact('supports'));
     }
 
     public function show(string|int $support)
@@ -27,7 +27,7 @@ class SupportController extends Controller
 
     public function create()
     {
-        return view('admin/supports/create');
+        return view('admin.supports.create');
     }
 
     public function store(Request $request, Support $support)
@@ -38,6 +38,28 @@ class SupportController extends Controller
         $support->create($data);
 
         return redirect()->route('supports.index')->with('success','Duvida Cadaastrada com sucesso!');
+    }
+
+    public function edit(Request $request, $id)
+    {
+        //TODO verificar validação quanto ao voltar
+        if (!$support = Support::where('id', $id)->first()) {
+            return back();
+        }
+
+        return view('admin.supports.edit', compact('support'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        if (!$support = $request->find($id)){
+            return back();
+        }
+
+        $support->update($request);
+
+        return redirect()->route('supports.index')->with('success','Duvida alterada com sucesso!');
+
     }
 
 }
