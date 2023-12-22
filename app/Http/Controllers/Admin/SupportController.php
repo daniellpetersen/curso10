@@ -16,6 +16,15 @@ class SupportController extends Controller
         return view('admin/supports/index', compact('supports'));
     }
 
+    public function show(string|int $support)
+    {
+        if (!$support = Support::find($support)) {
+            return back();
+        }
+
+        return view('admin.supports.show', compact('support'));
+    }
+
     public function create()
     {
         return view('admin/supports/create');
