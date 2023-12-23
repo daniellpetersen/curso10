@@ -1,6 +1,12 @@
 <h1>Dúvida: {{ $support->id }}</h1>
 
-<form action="{{ route('supports.update', ['support' => $support->id]) }}" method="POST">
+@if ($errors->any())
+    @foreach ($errors->all() as $error )
+        {{ $error }}
+    @endforeach
+@endif
+
+<form action="{{ route('supports.update', ['support' => $support->id]) }}" method="post">
     @csrf
     @method('PUT')
     <input type="text" placeholder="Assunto" name="subject" value="{{ $support->subject }}">
