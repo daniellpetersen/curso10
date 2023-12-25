@@ -1,3 +1,4 @@
+
 <h1>Detalhes da Dúvida {{ $support->id }}</h1>
 
 <ul>
@@ -11,3 +12,4 @@
     @method('DELETE')
     <button type="submit">Deletar</button>
 </form>
+

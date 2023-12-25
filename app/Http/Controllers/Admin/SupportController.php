@@ -2,95 +2,76 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\CreateSupportDTO;
+use App\DTO\UpdateSupportDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUpdateRequest;
+use App\Services\SupportService;
 use App\Models\Support;
 use Illuminate\Http\Request;
 
 class SupportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function __construct(protected SupportService $service)
+    {}
+
+    public function index(Request $request)
     {
-        $supports = Support::all();
+        $supports = $this->service->getAll($request->filter);
 
         return view('admin.supports.index', compact('supports'));
     }
 
-     /**
-     * Display the specified resource.
-     */
-    public function show(string|int $support)
+    public function show(string|int $id)
     {
-        if (!$support = Support::find($support)) {
+        if (!$support = $this->service->findOne($id)) {
             return back();
         }
 
         return view('admin.supports.show', compact('support'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.supports.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreUpdateRequest $request, Support $support)
     {
-        $data = $request->validated();
-        $data['status'] = 'a';
-
-        $support->create($data);
+        $this->service->new(
+            CreateSupportDTO::makeFromRequest($request)
+        );
 
         return redirect()->route('supports.index')->with('success','Duvida Cadaastrada com sucesso!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Request $request, $id)
+    public function edit(string $id)
     {
-        //TODO verificar validação quanto ao voltar
-        if (!$support = Support::where('id', $id)->first()) {
+        if (!$support = $this->service->findOne($id)) {
             return back();
         }
 
         return view('admin.supports.edit', compact('support'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(StoreUpdateRequest $request, $id)
+    public function update(StoreUpdateRequest $request, string $id)
     {
-        if (!$support = Support::find($id)){
-            return redirect()->back();
-        }
-  
-        $support->update($request->validated());
+        //dd($request);
+        $support = $this->service->update(
+            UpdateSupportDTO::makeFromRequest($request),
+        );
 
-        return redirect()->route('supports.index')->with('success','Duvida alterada com sucesso!');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Request $request, $id)
-    {
-        //TODO verificar validação quanto ao voltar
-        if (!$support = Support::where('id', $id)->first()) {
+        if (!$support) {
             return back();
         }
 
-        $support->delete();
+        return redirect()->route('supports.index')->with('success','Duvida alterada com sucesso!');
+    }
+
+    public function destroy($id)
+    {
+        $this->service->delete($id);
 
         return redirect()->route('supports.index')->with('success','Duvida excluída com sucesso!');
     }
