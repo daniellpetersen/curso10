@@ -13,10 +13,10 @@ class UpdateSupportDTO
         public string $body
     ){}
 
-    public static function makeFromRequest(StoreUpdateRequest $request, string $id = null): self
+    public static function makeFromRequest(StoreUpdateRequest $request): self
     {
         return new self(
-            $id ?? $request->id,
+            $request->id,
             $request->subject,
             'a',
             $request->body
