@@ -65,7 +65,9 @@ class SupportController extends Controller
     {
         //dd($request);
         $support = $this->service->update(
-            UpdateSupportDTO::makeFromRequest($request),
+
+            UpdateSupportDTO::makeFromRequest($request, $id),
+        
         );
 
         if (!$support) {
