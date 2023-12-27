@@ -63,7 +63,7 @@ class SupportController extends Controller
 
     public function update(StoreUpdateRequest $request, string $id)
     {
-        //dd($request);
+        dd($request);
         $support = $this->service->update(
             UpdateSupportDTO::makeFromRequest($request),
         );
