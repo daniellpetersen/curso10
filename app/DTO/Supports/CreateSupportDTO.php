@@ -14,7 +14,7 @@ class CreateSupportDTO
         public string $body,
     ) {}
 
-    public static function makeFromRequest(StoreUpdateSupport $request): self
+    public static function makeFromRequest(StoreUpdateRequest $request): self
     {
         return new self(
             $request->subject,
